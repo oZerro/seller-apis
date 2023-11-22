@@ -32,7 +32,11 @@ def get_product_list(last_id, client_id, seller_token):
 
 
 def get_offer_ids(client_id, seller_token):
-    """Получить артикулы товаров магазина озон"""
+    """Получить артикулы товаров магазина озон
+    
+    client_id -> id клиента на маркетплейсе озон
+    seller_token -> токен клиента на маркетплейсе озон
+    """
     last_id = ""
     product_list = []
     while True:
@@ -49,7 +53,7 @@ def get_offer_ids(client_id, seller_token):
 
 
 def update_price(prices: list, client_id, seller_token):
-    """Обновить цены товаров"""
+    """Обновить цены товаров магазина озон"""
     url = "https://api-seller.ozon.ru/v1/product/import/prices"
     headers = {
         "Client-Id": client_id,
@@ -62,7 +66,7 @@ def update_price(prices: list, client_id, seller_token):
 
 
 def update_stocks(stocks: list, client_id, seller_token):
-    """Обновить остатки"""
+    """Обновить остатки магазина озон"""
     url = "https://api-seller.ozon.ru/v1/product/import/stocks"
     headers = {
         "Client-Id": client_id,
@@ -75,7 +79,7 @@ def update_stocks(stocks: list, client_id, seller_token):
 
 
 def download_stock():
-    """Скачать файл ostatki с сайта casio"""
+    """Скачать файл ostatki с сайта timeworld.ru - часы бренда casio"""
     # Скачать остатки с сайта
     casio_url = "https://timeworld.ru/upload/files/ostatki.zip"
     session = requests.Session()
@@ -96,6 +100,12 @@ def download_stock():
 
 
 def create_stocks(watch_remnants, offer_ids):
+    """Возвращает список артикулов товаров с иформацией о количестве по каждому
+
+    watch_remnants -> словарь с остатками часов
+    offer_ids -> список артикулов товаров магазина озон
+    """
+
     # Уберем то, что не загружено в seller
     stocks = []
     for watch in watch_remnants:
@@ -116,6 +126,11 @@ def create_stocks(watch_remnants, offer_ids):
 
 
 def create_prices(watch_remnants, offer_ids):
+    """Возвращает список артикулов с иформацией о цене
+
+    watch_remnants -> словарь с остатками часов
+    offer_ids -> список артикулов товаров магазина озон
+    """
     prices = []
     for watch in watch_remnants:
         if str(watch.get("Код")) in offer_ids:
