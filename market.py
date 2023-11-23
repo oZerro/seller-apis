@@ -11,6 +11,12 @@ logger = logging.getLogger(__file__)
 
 
 def get_product_list(page, campaign_id, access_token):
+    """Получает список продуктов с маркетплейса Яндекс маркет
+
+    page -> номер страницы с которой собираются данные
+    campaign_id -> id компании на меркетплейсе
+    access_token -> персональный api токен для авторизации
+    """
     endpoint_url = "https://api.partner.market.yandex.ru/"
     headers = {
         "Content-Type": "application/json",
@@ -30,6 +36,13 @@ def get_product_list(page, campaign_id, access_token):
 
 
 def update_stocks(stocks, campaign_id, access_token):
+    """Обновляет список продуктов маркетплейса Яндекс маркет
+
+    stocks -> список продукции котоую надо загрузить
+    campaign_id -> id компании на меркетплейсе
+    access_token -> персональный api токен для авторизации
+    """
+
     endpoint_url = "https://api.partner.market.yandex.ru/"
     headers = {
         "Content-Type": "application/json",
@@ -46,6 +59,13 @@ def update_stocks(stocks, campaign_id, access_token):
 
 
 def update_price(prices, campaign_id, access_token):
+    """Обновляет цены продуктов маркетплейса Яндекс маркет
+
+    prices -> список цен 
+    campaign_id -> id компании на меркетплейсе
+    access_token -> персональный api токен для авторизации
+    """
+
     endpoint_url = "https://api.partner.market.yandex.ru/"
     headers = {
         "Content-Type": "application/json",
@@ -62,7 +82,11 @@ def update_price(prices, campaign_id, access_token):
 
 
 def get_offer_ids(campaign_id, market_token):
-    """Получить артикулы товаров Яндекс маркета"""
+    """Получить артикулы товаров Яндекс маркета
+    
+    campaign_id -> id компании на меркетплейсе
+    market_token -> персональный api токен для авторизации
+    """
     page = ""
     product_list = []
     while True:
@@ -78,6 +102,14 @@ def get_offer_ids(campaign_id, market_token):
 
 
 def create_stocks(watch_remnants, offer_ids, warehouse_id):
+    """Обновляет информацию по имеющимся моделям и добавляет недостающие,
+       возвращает обновленный список продукции
+    
+    watch_remnants -> список остатков часов casio
+    offer_ids -> список артикулов магазина на Яндекс маркете
+    warehouse_id -> id склада
+    """
+
     # Уберем то, что не загружено в market
     stocks = list()
     date = str(datetime.datetime.utcnow().replace(microsecond=0).isoformat() + "Z")
@@ -123,6 +155,11 @@ def create_stocks(watch_remnants, offer_ids, warehouse_id):
 
 
 def create_prices(watch_remnants, offer_ids):
+    """Возвращает обновленный список цен на продукцию
+    
+    watch_remnants -> список остатков часов casio
+    offer_ids -> список артикулов магазина на Яндекс маркете
+    """
     prices = []
     for watch in watch_remnants:
         if str(watch.get("Код")) in offer_ids:
@@ -143,6 +180,12 @@ def create_prices(watch_remnants, offer_ids):
 
 
 async def upload_prices(watch_remnants, campaign_id, market_token):
+    """Загружает обновленный список цен 
+    
+    watch_remnants -> список остатков часов casio
+    campaign_id -> id компании на меркетплейсе
+    market_token -> персональный api токен для авторизации
+    """
     offer_ids = get_offer_ids(campaign_id, market_token)
     prices = create_prices(watch_remnants, offer_ids)
     for some_prices in list(divide(prices, 500)):
@@ -151,6 +194,13 @@ async def upload_prices(watch_remnants, campaign_id, market_token):
 
 
 async def upload_stocks(watch_remnants, campaign_id, market_token, warehouse_id):
+    """Загружает обновленный список товаров
+    
+    watch_remnants -> список остатков часов casio
+    campaign_id -> id компании на меркетплейсе
+    market_token -> персональный api токен для авторизации
+    warehouse_id -> id склада
+    """
     offer_ids = get_offer_ids(campaign_id, market_token)
     stocks = create_stocks(watch_remnants, offer_ids, warehouse_id)
     for some_stock in list(divide(stocks, 2000)):
