@@ -18,7 +18,7 @@ def get_product_list(page, campaign_id, access_token):
         campaign_id (str): id компании на меркетплейсе
         access_token (str): персональный api токен для авторизации
     Returns:
-        список товаров в формате json
+        dict: список товаров
     """
     endpoint_url = "https://api.partner.market.yandex.ru/"
     headers = {
@@ -46,7 +46,7 @@ def update_stocks(stocks, campaign_id, access_token):
         campaign_id (str): id компании на меркетплейсе
         access_token (str): персональный api токен для авторизации
     Returns:
-        список артикулов в формате json
+        dict: список артикулов
     """
 
     endpoint_url = "https://api.partner.market.yandex.ru/"
@@ -73,7 +73,7 @@ def update_price(prices, campaign_id, access_token):
         access_token (str): персональный api токен для авторизации
 
     Returns:
-        список цен в формате json
+        dict: список цен
     """
 
     endpoint_url = "https://api.partner.market.yandex.ru/"

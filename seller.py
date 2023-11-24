@@ -20,7 +20,7 @@ def get_product_list(last_id, client_id, seller_token):
         seller_token (str): токен клиента на маркетплейсе озон
 
     Returns:
-        список товаров в формате json
+        dict: список товаров
 
     """
     url = "https://api-seller.ozon.ru/v2/product/list"
@@ -73,7 +73,7 @@ def update_price(prices: list, client_id, seller_token):
         client_id (str): id клиента на маркетплейсе озон
         seller_token (str): токен клиента на маркетплейсе озон
     Returns:
-        список цен в формате json
+        dict: список цен
     """
     url = "https://api-seller.ozon.ru/v1/product/import/prices"
     headers = {
@@ -94,7 +94,7 @@ def update_stocks(stocks: list, client_id, seller_token):
         client_id (str): id клиента на маркетплейсе озон
         seller_token (str): токен клиента на маркетплейсе озон
     Returns:
-        список артикулов в формате json
+        dict: список артикулов
     """
     url = "https://api-seller.ozon.ru/v1/product/import/stocks"
     headers = {
