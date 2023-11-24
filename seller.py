@@ -12,7 +12,17 @@ logger = logging.getLogger(__file__)
 
 
 def get_product_list(last_id, client_id, seller_token):
-    """Получить список товаров магазина озон"""
+    """Получить список товаров магазина озон
+    
+    Args:
+        last_id (str): id крайней позиции
+        client_id (str): id клиента на маркетплейсе озон
+        seller_token (str): токен клиента на маркетплейсе озон
+
+    Returns:
+        список товаров в формате json
+
+    """
     url = "https://api-seller.ozon.ru/v2/product/list"
     headers = {
         "Client-Id": client_id,
@@ -34,8 +44,11 @@ def get_product_list(last_id, client_id, seller_token):
 def get_offer_ids(client_id, seller_token):
     """Получить артикулы товаров магазина озон
     
-    client_id -> id клиента на маркетплейсе озон
-    seller_token -> токен клиента на маркетплейсе озон
+    Args:
+        client_id (str): id клиента на маркетплейсе озон
+        seller_token (str): токен клиента на маркетплейсе озон
+    Returns:
+        list: список артикулов
     """
     last_id = ""
     product_list = []
@@ -53,7 +66,15 @@ def get_offer_ids(client_id, seller_token):
 
 
 def update_price(prices: list, client_id, seller_token):
-    """Обновить цены товаров магазина озон"""
+    """Обновить цены товаров магазина озон
+
+    Args:
+        prices (list): список цен по каждой позиции
+        client_id (str): id клиента на маркетплейсе озон
+        seller_token (str): токен клиента на маркетплейсе озон
+    Returns:
+        список цен в формате json
+    """
     url = "https://api-seller.ozon.ru/v1/product/import/prices"
     headers = {
         "Client-Id": client_id,
@@ -66,7 +87,15 @@ def update_price(prices: list, client_id, seller_token):
 
 
 def update_stocks(stocks: list, client_id, seller_token):
-    """Обновить остатки магазина озон"""
+    """Обновить остатки магазина озон
+    
+    Args:
+        stocks (list): список артикулов
+        client_id (str): id клиента на маркетплейсе озон
+        seller_token (str): токен клиента на маркетплейсе озон
+    Returns:
+        список артикулов в формате json
+    """
     url = "https://api-seller.ozon.ru/v1/product/import/stocks"
     headers = {
         "Client-Id": client_id,
@@ -79,7 +108,11 @@ def update_stocks(stocks: list, client_id, seller_token):
 
 
 def download_stock():
-    """Скачать файл ostatki с сайта timeworld.ru - часы бренда casio"""
+    """Скачать файл ostatki с сайта timeworld.ru - часы бренда casio
+
+    Returns:
+        list: список остатков часов 
+    """
     # Скачать остатки с сайта
     casio_url = "https://timeworld.ru/upload/files/ostatki.zip"
     session = requests.Session()
@@ -102,8 +135,12 @@ def download_stock():
 def create_stocks(watch_remnants, offer_ids):
     """Возвращает список артикулов товаров с иформацией о количестве по каждому
 
-    watch_remnants -> словарь с остатками часов
-    offer_ids -> список артикулов товаров магазина озон
+    Args:
+        watch_remnants (dict): словарь с остатками часов
+        offer_ids (list): список артикулов товаров магазина озон
+
+    Returns:
+        list: список артикулов 
     """
 
     # Уберем то, что не загружено в seller
@@ -126,10 +163,14 @@ def create_stocks(watch_remnants, offer_ids):
 
 
 def create_prices(watch_remnants, offer_ids):
-    """Возвращает список артикулов с иформацией о цене
+    """Возвращает список с артикулами, и с иформацией о цене
 
-    watch_remnants -> словарь с остатками часов
-    offer_ids -> список артикулов товаров магазина озон
+    Args:
+        watch_remnants (dict): словарь с остатками часов
+        offer_ids (list): список артикулов товаров магазина озон
+
+    Returns:
+        list: список цен по каждой позиции
     """
     prices = []
     for watch in watch_remnants:
@@ -146,12 +187,28 @@ def create_prices(watch_remnants, offer_ids):
 
 
 def price_conversion(price: str) -> str:
-    """Преобразовать цену. Пример: 5'990.00 руб. -> 5990"""
+    """Преобразовать цену. Пример: 5'990.00 руб. -> 5990
+
+    Args:
+        price (str): цена - Пример: 5'990.00 руб
+
+    Returns:
+        str: строка состоящая только из цифр
+        
+    """
     return re.sub("[^0-9]", "", price.split(".")[0])
 
 
 def divide(lst: list, n: int):
-    """Разделить список lst на части по n элементов"""
+    """Разделить список lst на части по n элементов
+    
+    Args:
+        lst (list): список элементов
+        n (int): кол-во элементов для деления
+
+    Returns:
+        list: список состоящий из n элементов
+    """
     for i in range(0, len(lst), n):
         yield lst[i : i + n]
 
